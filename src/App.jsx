@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ChatbotIcon from './components/ChatbotIcon';
 import { Boticon } from './components/ChatbotIcon';
 import Chatform from './components/Chatform';
@@ -8,10 +8,17 @@ export const App = () => {
   const [messages, setMessages] = useState([
     { role: 'model', text: 'Hi! How can I help you?' },
   ]);
+  const chatBodyRef = useRef(null);
 
   const addMessage = (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
   };
+
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
     <div className="container">
@@ -29,7 +36,7 @@ export const App = () => {
                 </button>
               </div>
             </div>
-            <div className="chat-body">
+            <div className="chat-body" ref={chatBodyRef}>
               {messages.map((chat, index) => (
                 <ChatMessage key={index} chat={chat} />
               ))}
