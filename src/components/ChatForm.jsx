@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import TypingIndicator from './TypingIndicator';
 
 const ChatForm = ({ addMessage }) => {
+    const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const getChatbotResponse = async (message) => {
@@ -46,50 +48,54 @@ const ChatForm = ({ addMessage }) => {
         }
     };
 
-    const handleFormSubmit = async (event) => {
-        event.preventDefault();
-        const inputField = event.target.querySelector('.chat-input');
-        const message = inputField.value.trim();
-        console.log();
-        
-        
-        if (!message) return;
-        
-        inputField.value = '';
-        
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!message.trim()) return;
+
         // Add user message
         addMessage({
             isBot: false,
-            text: message
+            text: message.trim()
         });
 
-        // Show bot is typing
+        setMessage(''); // Clear input
         setIsLoading(true);
 
-        // Get bot response
-        const botResponse = await getChatbotResponse(message);
-        
-        // Add bot message
-        addMessage({
-            isBot: true,
-            text: botResponse
-        });
-
-        setIsLoading(false);
+        try {
+            const botResponse = await getChatbotResponse(message);
+            addMessage({
+                isBot: true,
+                text: botResponse
+            });
+        } catch (error) {
+            console.error('Error:', error);
+            addMessage({
+                isBot: true,
+                text: "Sorry, I couldn't process your request."
+            });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
-        <form action="#" className="chat-form" onSubmit={handleFormSubmit}>
+        <form className="chat-form" onSubmit={handleSubmit}>
             <input
                 type="text"
                 className="chat-input"
-                placeholder={isLoading ? "Bot is typing..." : "Type your message here..."}
-                required
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type your message here..."
                 disabled={isLoading}
             />
-            <button type="submit" className="send-button" disabled={isLoading}>
+            <button 
+                type="submit" 
+                className="send-button" 
+                disabled={isLoading || !message.trim()}
+            >
                 <span className="material-symbols-rounded">send</span>
             </button>
+            {isLoading && <TypingIndicator />}
         </form>
     );
 };
