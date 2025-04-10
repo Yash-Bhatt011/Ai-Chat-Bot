@@ -25,5 +25,4 @@ dist-ssr
 
 # Environment files
 .env
-/node_modules
-/package-.json
+
