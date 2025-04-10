@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://generativelanguage.googleapis.com',
+        target: ' https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

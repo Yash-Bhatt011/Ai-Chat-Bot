@@ -1,5 +1,5 @@
-// App.jsx remains unchanged except for adding a stars container
 import React, { useState, useRef, useEffect } from 'react';
+import nlp from 'compromise'; // Import Compromise for NLU
 import ChatbotIcon from './components/ChatbotIcon';
 import { Boticon } from './components/ChatbotIcon';
 import Chatform from './components/Chatform';
@@ -13,8 +13,36 @@ export const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const chatBodyRef = useRef(null);
 
+  // Function to process user input and generate bot response
+  const processMessage = (userMessage) => {
+    const doc = nlp(userMessage);
+
+    // Detect intents using Compromise patterns
+    if (doc.has('#Greeting')) {
+      return 'Hello! How can I assist you today?';
+    } else if (doc.has('#Weather')) {
+      return 'The weather is sunny today! Anything else I can help with?';
+    } else if (doc.has('#Question')) {
+      return 'Good question! Could you provide more details so I can assist you better?';
+    } else {
+      return 'Sorry, I didn’t quite understand that. Can you try again?';
+    }
+  };
+
+  // Function to add messages to the chat
   const addMessage = (message) => {
     setMessages((prevMessages) => [...prevMessages, { ...message, timestamp: new Date().toLocaleTimeString() }]);
+
+    // If the message is from the user, process it and respond
+    if (message.role === 'user') {
+      const botResponse = processMessage(message.text);
+      setTimeout(() => {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { role: 'model', text: botResponse, timestamp: new Date().toLocaleTimeString() },
+        ]);
+      }, 500); // Add a slight delay for a natural feel
+    }
   };
 
   const toggleDarkMode = () => {
@@ -56,9 +84,6 @@ export const App = () => {
                 <div className="logo-text">
                   <h3>Arvis 1.0</h3>
                 </div>
-                <button className="minimize-button">
-                  <span className="material-symbols-rounded">keyboard_arrow_down</span>
-                </button>
               </div>
               <div className="header-controls">
                 <button className="dark-mode-toggle" onClick={toggleDarkMode}>

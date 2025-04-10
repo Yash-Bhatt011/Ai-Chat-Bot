@@ -238,7 +238,7 @@ body{
 }
 
 .chat-header {
-  padding: 16px;
+  padding: 26px;
   background: rgba(255,255,255,0.1);
   backdrop-filter: blur(4px);
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -248,17 +248,26 @@ body{
 
 .header-info {
   display: flex;
+  margin-top: px;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
+  position: relative;
 }
 
 .header-controls {
   display: flex;
-  gap: 0px;
+  gap: 0; /* No space between items */
   align-items: center;
-  margin-top: 8px;
-  margin-left: 150px;
+  position: absolute;
+  right: 0;
+  top: 70%;
+  transform: translateY(-90%);
+}
+
+/* Add this to ensure buttons are truly flush */
+.header-controls button {
+  margin: 0; /* Remove any default margins */
+  padding: 8px 16px; /* Adjust padding as needed, but consistent */
 }
 
 .dark-mode-toggle,
@@ -266,25 +275,18 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-left: 0;
 }
 
 .clear-chat-button {
-  margin-left: 80px;
-}
-
-.dark-mode-toggle:hover,
-.clear-chat-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
+  margin-left: 0;
 }
 
 .material-symbols-rounded {
@@ -307,14 +309,14 @@ svg {
 }
 
 .logo-text h3 {
-  margin-top: 25px;
+  margin: 0;
   font-size: 1.1rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  font-family: 'lato',sans-serif
+  font-family: 'lato',sans-serif;
 }
 
-.minimize-button {
+/* .minimize-button {
   background: none;
   border: none;
   color: var(--accent);
@@ -326,7 +328,7 @@ svg {
 .minimize-button:hover {
   color: var(--accent-hover);
   transform: scale(1.1);
-}
+} */
 
 .chat-body {
   flex: 1;
@@ -499,7 +501,7 @@ svg {
   transform: translateX(-50%);
   width: 111px;
   height: 5px;
-  background: #000000;
+  background: #9e9b9b;
   border-radius: 100px;
   opacity: 0.3;
   z-index: 10;
